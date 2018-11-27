@@ -1,4 +1,6 @@
 import os, copy
+import random
+import time
 
 n = 8  # board size (even)
 board = [['0' for x in range(n)] for y in range(n)]
@@ -77,12 +79,12 @@ def EvalBoard(board, player):
     for y in range(n):
         for x in range(n):
             if board[y][x] == player:
-                if (x == 0 or x == n - 1) and (y == 0 or y == n - 1):
-                    tot += 4  # corner
-                elif (x == 0 or x == n - 1) or (y == 0 or y == n - 1):
-                    tot += 2  # side
-                else:
-                    tot += 1
+                # if (x == 0 or x == n - 1) and (y == 0 or y == n - 1):
+                #     tot += 4  # corner
+                # elif (x == 0 or x == n - 1) or (y == 0 or y == n - 1):
+                #     tot += 2  # side
+                # else:
+                tot += 1
     return tot
 
 
@@ -110,47 +112,71 @@ InitBoard()
 while True:
     for p in range(2):
         print
-        PrintBoard()
+        # PrintBoard()
         player = str(p + 1)
         print('PLAYER: ' + player)
         if IsTerminalNode(board, player):
             print('Player cannot play! Game ended!')
-            print('Score User: ' + str(EvalBoard(board, '1')))
-            print('Score AI  : ' + str(EvalBoard(board, '2')))
+            print('Score Comp1: ' + str(EvalBoard(board, '1')))
+            print('Score Comp2: ' + str(EvalBoard(board, '2')))
             os._exit(0)
-        if player == '1':  # user's turn
+        # if player == '1':  # user's turn
+        #         #     while True:
+        #         #         xy = input('X Y: ')
+        #         #         if xy == '': os._exit(0)
+        #         #         (x, y) = xy.split()
+        #         #         x = int(x)
+        #         #         y = int(y)
+        #         #         if ValidMove(board, x, y, player):
+        #         #             (board, totctr) = MakeMove(board, x, y, player)
+        #         #             print('# of pieces taken: ' + str(totctr))
+        #         #             break
+        #         #         else:
+        #         #             print('Invalid move! Try again!')
+        #         #     if not (x == -1 and y == -1):
+        #         #         (board, totctr) = MakeMove(board, x, y, player)
+        #         #         print('player1 played (X Y): ' + str(x) + ' ' + str(y))
+        #         #         print('# of pieces taken: ' + str(totctr))
+        #         #         PrintBoard()
+        if player == '1':  # computer1's turn
             while True:
-                xy = input('X Y: ')
-                if xy == '': os._exit(0)
-                (x, y) = xy.split()
+                validlist = []
+                for x in range(8):
+                    for y in range(8):
+                        if ValidMove(board, x, y, player):
+                            validlist.append([x, y])
+                random.shuffle(validlist)
+                (x, y) = validlist.pop()
                 x = int(x)
                 y = int(y)
-                if ValidMove(board, x, y, player):
-                    (board, totctr) = MakeMove(board, x, y, player)
-                    print('# of pieces taken: ' + str(totctr))
-                    break
-                else:
-                    print('Invalid move! Try again!')
+                (board, totctr) = MakeMove(board, x, y, player)
+                print('# of pieces taken: ' + str(totctr))
+                break
+
             if not (x == -1 and y == -1):
                 (board, totctr) = MakeMove(board, x, y, player)
                 print('player1 played (X Y): ' + str(x) + ' ' + str(y))
                 print('# of pieces taken: ' + str(totctr))
                 PrintBoard()
-        else:  # AI's turn
+                # time.sleep(1)
+
+        else:  # computer2's turn
             while True:
-                xy = input('X Y: ')
-                if xy == '': os._exit(0)
-                (x, y) = xy.split()
+                validlist = []
+                for x in range(8):
+                    for y in range(8):
+                        if ValidMove(board, x, y, player):
+                            validlist.append([x, y])
+                random.shuffle(validlist)
+                (x, y) = validlist.pop()
                 x = int(x)
                 y = int(y)
-                if ValidMove(board, x, y, player):
-                    (board, totctr) = MakeMove(board, x, y, player)
-                    print('# of pieces taken: ' + str(totctr))
-                    break
-                else:
-                    print('Invalid move! Try again!')
-            if not (x == -1 and y == -1):
                 (board, totctr) = MakeMove(board, x, y, player)
+                print('# of pieces taken: ' + str(totctr))
+                break
+
+            if not (x == -1 and y == -1):
+                # (board, totctr) = MakeMove(board, x, y, player)
                 print('player2 played (X Y): ' + str(x) + ' ' + str(y))
                 print('# of pieces taken: ' + str(totctr))
                 PrintBoard()
