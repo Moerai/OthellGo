@@ -94,7 +94,6 @@ def IsTerminalNode(board, player):
                 return False
     return True
 
-
 def GetSortedNodes(board, player):
     sortedNodes = []
     for y in range(n):
