@@ -85,105 +85,6 @@ def AlphaBeta(board, player, depth, alpha, beta, maximizingPlayer):
                         break # alpha cut-off
         return v
 
-def AlphaBetaSN(board, player, depth, alpha, beta, maximizingPlayer):
-    if depth == 0 or IsTerminalNode(board, player):
-        return EvalBoard(board, player)
-    sortedNodes = GetSortedNodes(board, player)
-    if maximizingPlayer:
-        v = minEvalBoard
-        for boardTemp in sortedNodes:
-            v = max(v, AlphaBetaSN(boardTemp, player, depth - 1, alpha, beta, False))
-            alpha = max(alpha, v)
-            if beta <= alpha:
-                break # beta cut-off
-        return v
-    else: # minimizingPlayer
-        v = maxEvalBoard
-        for boardTemp in sortedNodes:
-            v = min(v, AlphaBetaSN(boardTemp, player, depth - 1, alpha, beta, True))
-            beta = min(beta, v)
-            if beta <= alpha:
-                break # alpha cut-off
-        return v
-
-def Negamax(board, player, depth, color):
-    if depth == 0 or IsTerminalNode(board, player):
-        return color * EvalBoard(board, player)
-    bestValue = minEvalBoard
-    for y in range(n):
-        for x in range(n):
-            if ValidMove(board, x, y, player):
-                (boardTemp, totctr) = MakeMove(copy.deepcopy(board), x, y, player)
-                v = -Negamax(boardTemp, player, depth - 1, -color)
-                bestValue = max(bestValue, v)
-    return bestValue
-
-def NegamaxAB(board, player, depth, alpha, beta, color):
-    if depth == 0 or IsTerminalNode(board, player):
-        return color * EvalBoard(board, player)
-    bestValue = minEvalBoard
-    for y in range(n):
-        for x in range(n):
-            if ValidMove(board, x, y, player):
-                (boardTemp, totctr) = MakeMove(copy.deepcopy(board), x, y, player)
-                v = -NegamaxAB(boardTemp, player, depth - 1, -beta, -alpha, -color)
-                bestValue = max(bestValue, v)
-                alpha = max(alpha, v)
-                if alpha >= beta:
-                    break
-    return bestValue
-
-def NegamaxABSN(board, player, depth, alpha, beta, color):
-    if depth == 0 or IsTerminalNode(board, player):
-        return color * EvalBoard(board, player)
-    sortedNodes = GetSortedNodes(board, player)
-    bestValue = minEvalBoard
-    for boardTemp in sortedNodes:
-        v = -NegamaxABSN(boardTemp, player, depth - 1, -beta, -alpha, -color)
-        bestValue = max(bestValue, v)
-        alpha = max(alpha, v)
-        if alpha >= beta:
-            break
-    return bestValue
-
-def Negascout(board, player, depth, alpha, beta, color):
-    if depth == 0 or IsTerminalNode(board, player):
-        return color * EvalBoard(board, player)
-    firstChild = True
-    for y in range(n):
-        for x in range(n):
-            if ValidMove(board, x, y, player):
-                (boardTemp, totctr) = MakeMove(copy.deepcopy(board), x, y, player)
-                if not firstChild:
-                    score = -Negascout(boardTemp, player, depth - 1, -alpha - 1, -alpha, -color)
-                    if alpha < score and score < beta:
-                        score = -Negascout(boardTemp, player, depth - 1, -beta, -score, -color)
-                else:
-                    firstChild = False
-                    score = -Negascout(boardTemp, player, depth - 1, -beta, -alpha, -color)
-                alpha = max(alpha, score)
-                if alpha >= beta:
-                    break
-    return alpha
-
-def NegascoutSN(board, player, depth, alpha, beta, color):
-    if depth == 0 or IsTerminalNode(board, player):
-        return color * EvalBoard(board, player)
-    sortedNodes = GetSortedNodes(board, player)
-    firstChild = True
-    for boardTemp in sortedNodes:
-        if not firstChild:
-            score = -NegascoutSN(boardTemp, player, depth - 1, -alpha - 1, -alpha, -color)
-            if alpha < score and score < beta:
-                score = -NegascoutSN(boardTemp, player, depth - 1, -beta, -score, -color)
-        else:
-            firstChild = False
-            score = -NegascoutSN(boardTemp, player, depth - 1, -beta, -alpha, -color)
-        alpha = max(alpha, score)
-        if alpha >= beta:
-            break
-    return alpha
-
 def ValidMove(board, x, y, player):
     if x < 0 or x > n - 1 or y < 0 or y > n - 1:
         return False
@@ -204,12 +105,12 @@ def EvalBoard(board, player):
     for y in range(n):
         for x in range(n):
             if board[y][x] == player:
-                if (x == 0 or x == n - 1) and (y == 0 or y == n - 1):
-                    tot += 4  # corner
-                elif (x == 0 or x == n - 1) or (y == 0 or y == n - 1):
-                    tot += 2  # side
-                else:
-                    tot += 1
+                # if (x == 0 or x == n - 1) and (y == 0 or y == n - 1):
+                #     tot += 4  # corner
+                # elif (x == 0 or x == n - 1) or (y == 0 or y == n - 1):
+                #     tot += 2  # side
+                # else:
+                tot += 1
     return tot
 
 
@@ -244,7 +145,9 @@ def GetSortedNodes(board, player):
     sortedNodes = [node[0] for node in sortedNodes]
     return sortedNodes
 
+
 InitBoard()
+is_terminal = [0, 0]  # 두 player 모두 돌을 놓을 수 없는지 확인하는 리스트.
 while True:
     for p in range(2):
         print
@@ -252,12 +155,17 @@ while True:
         player = str(p + 1)
         print('PLAYER: ' + player)
         if IsTerminalNode(board, player):
-            print('Player cannot play! Game ended!')
-            print('RL AI : ' + str(EvalBoard(board, '1')))
-            print('AlPHA AI  : ' + str(EvalBoard(board, '2')))
-            os._exit(0)
+            is_terminal[p] = 1
+            if 0 in is_terminal:
+                continue
+            else:
+                print('Player cannot play! Game ended!')
+                print('RL AI : ' + str(EvalBoard(board, '1')))
+                print('AlPHA AI  : ' + str(EvalBoard(board, '2')))
+                print(is_terminal)
+                os._exit(0)
 
-        if player == '1': #computer1's turn
+        if player == '1':  # computer1's turn ( 학습 시킬 아이 )
             while True:
                 validlist = []
                 for x in range(8):
@@ -269,14 +177,14 @@ while True:
                 x = int(x)
                 y = int(y)
                 (board, totctr) = MakeMove(board, x, y, player)
-                print('# of pieces taken: ' + str(totctr))
+                # print('# of pieces taken: ' + str(totctr))
                 break
 
             if not (x == -1 and y == -1):
                 (board, totctr) = MakeMove(board, x, y, player)
                 print('player2 played (X Y): ' + str(x) + ' ' + str(y))
                 print('# of pieces taken: ' + str(totctr))
-                PrintBoard()
+                # PrintBoard()
 
         else:  # computer2's turn (Alpha Beta)
             (x, y) = BestMove(board, player)
