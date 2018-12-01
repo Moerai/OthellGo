@@ -182,7 +182,7 @@ while True:
 
             if not (x == -1 and y == -1):
                 (board, totctr) = MakeMove(board, x, y, player)
-                print('player2 played (X Y): ' + str(x) + ' ' + str(y))
+                print('DQN played (X Y): ' + str(x) + ' ' + str(y))
                 print('# of pieces taken: ' + str(totctr))
                 # PrintBoard()
 
@@ -190,5 +190,5 @@ while True:
             (x, y) = BestMove(board, player)
             if not (x == -1 and y == -1):
                 (board, totctr) = MakeMove(board, x, y, player)
-                print('AI played (X Y): ' + str(x) + ' ' + str(y))
+                print('AlphaBeta played (X Y): ' + str(x) + ' ' + str(y))
                 print('# of pieces taken: ' + str(totctr))
