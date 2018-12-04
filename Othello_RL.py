@@ -21,8 +21,8 @@ model = cnndqn.CnnDQN(8*8, 8*8)
 
 optimizer = optim.Adam(model.parameters(), lr=0.00001)
 
-replay_initial = 10000
-replay_buffer = replaybuffer.ReplayBuffer(100000)
+replay_initial = 300
+replay_buffer = replaybuffer.ReplayBuffer(10000)
 
 epsilon_start = 1.0
 epsilon_final = 0.01
@@ -250,71 +250,80 @@ def alphabeta_agent(board, player):
 
 state = board
 num_episode = 100
-is_terminal = False
-
 for i in range(num_episode):
 
     # for frame_idx in range(1, num_frames+1):
     state = [['0' for x in range(n)] for y in range(n)]
 
     InitBoard()
-    player_terminal = [0, 0]
-    is_terminal = False
+    terminal = False
     # 한 게임
-    while not is_terminal:
+
+    while not terminal:
         for p in range(2):
             print
             # PrintBoard()
             player = str(p + 1)
             print('PLAYER: ' + player)
-            if IsTerminalNode(board, player):
-                player_terminal[p] = 1
-                if 0 in player_terminal:
-                    continue
-                else:
-                    is_terminal = True
-                    print('Player cannot play! Game ended!')
-                    print('Score Comp1: ' + str(EvalBoard(board, '1')))
-                    print('Score Comp2: ' + str(EvalBoard(board, '2')))
-                    # 이겼으면
-                    if EvalBoard(board, '2') > EvalBoard(board, '1'):
-                        reward = 10
-                    elif EvalBoard(board, '2') == EvalBoard(board, '1'):
-                        reward = 0
-                    else:
-                        reward = -5
-
-                    # discounted sum of reward 해서 각 에피소드별 reward 구해야할듯
-                    # 10판마다 학습시키는건 어디서하는거지?
-                    all_rewards.append(episode_reward)
-                    episode_reward = 0
-
-                    if len(replay_buffer) > replay_initial:
-                        loss = compute_td_loss(batch_size)
-                        losses.append(loss.data[0])
-
-                    # if frame_idx % 10000 == 0:
-                    #     plot(frame_idx, all_rewards, losses)
-
-
-                # 한 게임 끝
-                break
-                # os._exit(0)
 
             if player == '1': #computer1's turn
                 random_agent(board, player)
+                if IsTerminalNode(board, player):
+                    terminal = True
+                else:
+                    terminal = False
 
             else:  # computer2's turn (학습시킬아이)
-                epsilon = epsilon_by_frame(frame_idx)
+                epsilon = epsilon_by_frame(i)
                 validlist = get_validlist(board, player)
                 action = model.act(state, epsilon, validlist)  # return (x,y)
                 x = action[0]
                 y = action[1]
                 state = board
                 (board, totctr) = MakeMove(board, x, y, player)
-                next_state, reward, done = board, 0, False
+                # terminal 체크
+                if IsTerminalNode(board, player):
+                    terminal = True
+                else:
+                    terminal = False
+
+                next_state, reward, done = board, 0, terminal
+
+                #이걸 리스트에 다 넣고
                 replay_buffer.push(state, action, reward, next_state, done)
 
                 print('player' + player + 'played (X Y): ' + str(x) + ' ' + str(y))
                 print('# of pieces taken: ' + str(totctr))
                 PrintBoard()
+
+    # 한 게임이 끝났을 때
+    # 에피소드 list의 마지막 done을 True로 바꾸고 그걸 buffer로 바꾸기
+    replay_buffer
+    print('Player cannot play! Game ended!')
+    print('Score Comp1: ' + str(EvalBoard(board, '1')))
+    print('Score Comp2: ' + str(EvalBoard(board, '2')))
+    # 이겼으면
+    if EvalBoard(board, '2') > EvalBoard(board, '1'):
+        reward = 10
+    elif EvalBoard(board, '2') == EvalBoard(board, '1'):
+        reward = 0
+    else:
+        reward = -5
+
+    # discounted sum of reward 해서 각 에피소드별 reward 구해야할듯
+    # 10판마다 학습시키는건 어디서하는거지?
+    all_rewards.append(episode_reward)
+    episode_reward = 0
+
+    if len(replay_buffer) > replay_initial:
+        if num_episode % 10 == 0:
+            loss = compute_td_loss(batch_size)
+            losses.append(loss.data[0])
+
+    if frame_idx % 10000 == 0:
+        plot(frame_idx, all_rewards, losses)
+
+    # 한 게임 끝
+
+    # os._exit(0)
+
