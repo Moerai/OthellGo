@@ -26,9 +26,9 @@ class CnnDQN(nn.Module):
 
         # fully connected = 그냥 신경망
         self.fc = nn.Sequential(
-            nn.Linear(self.feature_size(), 128),
+            nn.Linear(32*6*6, 24),
             nn.ReLU(),
-            nn.Linear(128, self.num_actions)
+            nn.Linear(24, self.num_actions)
         )
 
     def forward(self, x):
@@ -42,16 +42,17 @@ class CnnDQN(nn.Module):
 
     def act(self, state, epsilon, validlist):
         if random.random() > epsilon:
+            state = np.expand_dims(np.float32(state), 0)
             state = Variable(torch.FloatTensor(np.float32(state)).unsqueeze(0), volatile=True)
             q_value = self.forward(state)  # size 64의 linear [1,2,3,4]
             # q_value에서 valid 한 것만 놔두기.
             valid_q_value = []
             for i in validlist:
                 idx = i[0]*8 + i[1]
-                valid_q_value.append(q_value[idx])
+                valid_q_value.append(q_value[0, idx])
             # action = valid_q_value.max(1)[1].data[0]
             val = np.max(valid_q_value)
-            val_idx = (q_value == val).nonzero.item()
+            val_idx = (q_value[0] == val).nonzero().item()
             # 해당 인덱스의 좌표 찾기
             x = int(val_idx//8)
             y = int(val_idx % 8)

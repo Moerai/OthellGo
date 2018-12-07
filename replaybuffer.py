@@ -18,6 +18,8 @@ class ReplayBuffer(object):
 
     def push(self, state, action, reward, next_state, done):
         state = np.expand_dims(state, 0)
+        state = np.expand_dims(state, 0)
+        next_state = np.expand_dims(next_state, 0)
         next_state = np.expand_dims(next_state, 0)
 
         self.buffer.append((state, action, reward, next_state, done))
@@ -28,3 +30,12 @@ class ReplayBuffer(object):
 
     def __len__(self):
         return len(self.buffer)
+
+    def change_last_done(self):
+        last = list(self.buffer[-1])
+        last[4] = True
+        self.buffer.pop()
+        self.buffer.append(last)
+
+    def get_last(self):
+        return self.buffer[-1]

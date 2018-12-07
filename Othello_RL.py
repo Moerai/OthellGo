@@ -1,5 +1,6 @@
 import os, copy
 import math, random
+import copy
 import numpy as np
 import torch
 import torch.nn as nn
@@ -7,6 +8,7 @@ import torch.optim as optim
 import torch.autograd as autograd
 import torch.nn.functional as F
 
+from datetime import datetime
 from collections import deque
 from IPython.display import clear_output
 import matplotlib.pyplot as plt
@@ -54,7 +56,13 @@ def compute_td_loss(batch_size):
 
     state = Variable(torch.FloatTensor(np.float32(state)))
     next_state = Variable(torch.FloatTensor(np.float32(next_state)), volatile=True)
-    action = Variable(torch.LongTensor(action))
+
+    action_list = []
+    for i in range(32):
+        action_idx = action[i][0] * 8 + action[i][1]
+        action_list.append(action_idx)
+
+    action = Variable(torch.LongTensor(action_list))
     reward = Variable(torch.FloatTensor(reward))
     done = Variable(torch.FloatTensor(done))
 
@@ -236,9 +244,9 @@ def random_agent(board, player):
     x = int(x)
     y = int(y)
     (board, totctr) = MakeMove(board, x, y, player)
-    print('player'+player+ 'played (X Y): ' + str(x) + ' ' + str(y))
-    print('# of pieces taken: ' + str(totctr))
-    PrintBoard()
+    # print('player'+player+ 'played (X Y): ' + str(x) + ' ' + str(y))
+    # print('# of pieces taken: ' + str(totctr))
+    # PrintBoard()
 
 def alphabeta_agent(board, player):
     (x, y) = BestMove(board, player)
@@ -250,15 +258,16 @@ def alphabeta_agent(board, player):
 
 state = board
 all_rewards = []
-num_episode = 1 # 에피소드(게임) 몇 번 돌릴지
+num_episode = 10000  # 에피소드(게임) 몇 번 돌릴지
 for i in range(num_episode):
 
     # for frame_idx in range(1, num_frames+1):
     state = [['0' for x in range(n)] for y in range(n)]
+    board = [['0' for x in range(n)] for y in range(n)]
     InitBoard()
     terminal = False
-    print(i+1, "번째 게임 시작")
-    PrintBoard()
+    print(i+1, "번째 게임")
+    # PrintBoard()
     # 한 게임
 
     while not terminal:
@@ -268,7 +277,7 @@ for i in range(num_episode):
                 player = str(p + 1)
             else:
                 player = '-1'
-            print('PLAYER: ' + player)
+            # print('PLAYER: ' + player)
 
             if player == '1': #computer1's turn
 
@@ -289,25 +298,25 @@ for i in range(num_episode):
                     action = model.act(state, epsilon, validlist)  # return (x,y)
                     x = action[0]
                     y = action[1]
-                    state = board
+                    state = copy.deepcopy(board)
                     (board, totctr) = MakeMove(board, x, y, player)
-
-
                     next_state, reward, done = board, 0, terminal
 
-                    #이걸 리스트에 다 넣고
                     replay_buffer.push(state, action, reward, next_state, done)
 
-                    print('player' + player + 'played (X Y): ' + str(x) + ' ' + str(y))
-                    print('# of pieces taken: ' + str(totctr))
-                    PrintBoard()
+                    # print('player' + player + 'played (X Y): ' + str(x) + ' ' + str(y))
+                    # print('# of pieces taken: ' + str(totctr))
+                    # PrintBoard()
 
     # 한 게임이 끝났을 때
-    # 에피소드 list의 마지막 done을 True로 바꾸고 그걸 buffer로 바꾸기
+    # 에피소드 마지막 done을 True로 바꾸기
+    replay_buffer.change_last_done()
 
-    print('Player cannot play! Game ended!')
+    print('게임종료')
+    PrintBoard()
     print('Score Comp1: ' + str(EvalBoard(board, '1')))
     print('Score Comp2: ' + str(EvalBoard(board, '-1')))
+    print("")
     # 이겼으면
     if EvalBoard(board, '-1') > EvalBoard(board, '1'):
         reward = 10
@@ -327,7 +336,11 @@ for i in range(num_episode):
             losses.append(loss.data[0])
 
     if i % 100 == 0:
+        # all_rewards를 평균으로하면 더 좋을듯. 근데 그럼 x축도 바꿔야함
+        # 왜냐면 지금 x축은 에피소드 개수이기 때문
         plot(i, all_rewards, losses)
+        now = datetime.today().strftime("%Y%m%d_%H%M%S")
+        torch.save(model, "./save/" + now + ".pt")
 
     # 한 게임 끝
 
