@@ -17,7 +17,7 @@ import replaybuffer
 USE_CUDA = torch.cuda.is_available()
 Variable = lambda *args, **kwargs: autograd.Variable(*args, **kwargs).cuda() if USE_CUDA else autograd.Variable(*args, **kwargs)
 
-model = cnndqn.CnnDQN(8*8, 8*8)
+model = cnndqn.CnnDQN((8, 8), 8*8)
 
 optimizer = optim.Adam(model.parameters(), lr=0.00001)
 
@@ -89,10 +89,10 @@ def plot(frame_idx, rewards, losses):
 def InitBoard():
     if n % 2 == 0:  # if board size is even
         z = int((n - 2) / 2)
-        board[z][z] = '2'
+        board[z][z] = '-1'
         board[n - 1 - z][z] = '1'
         board[z][n - 1 - z] = '1'
-        board[n - 1 - z][n - 1 - z] = '2'
+        board[n - 1 - z][n - 1 - z] = '-1'
 
 
 def PrintBoard():
@@ -249,79 +249,85 @@ def alphabeta_agent(board, player):
 
 
 state = board
-num_episode = 100
+all_rewards = []
+num_episode = 1 # 에피소드(게임) 몇 번 돌릴지
 for i in range(num_episode):
 
     # for frame_idx in range(1, num_frames+1):
     state = [['0' for x in range(n)] for y in range(n)]
-
     InitBoard()
     terminal = False
+    print(i+1, "번째 게임 시작")
+    PrintBoard()
     # 한 게임
 
     while not terminal:
         for p in range(2):
             print
-            # PrintBoard()
-            player = str(p + 1)
+            if p == 0:
+                player = str(p + 1)
+            else:
+                player = '-1'
             print('PLAYER: ' + player)
 
             if player == '1': #computer1's turn
-                random_agent(board, player)
+
                 if IsTerminalNode(board, player):
                     terminal = True
                 else:
                     terminal = False
+                    random_agent(board, player)
 
-            else:  # computer2's turn (학습시킬아이)
-                epsilon = epsilon_by_frame(i)
-                validlist = get_validlist(board, player)
-                action = model.act(state, epsilon, validlist)  # return (x,y)
-                x = action[0]
-                y = action[1]
-                state = board
-                (board, totctr) = MakeMove(board, x, y, player)
+            else:  # computer2's turn (학습시킬아이) player = -1
                 # terminal 체크
                 if IsTerminalNode(board, player):
                     terminal = True
                 else:
                     terminal = False
+                    epsilon = epsilon_by_frame(i)
+                    validlist = get_validlist(board, player)
+                    action = model.act(state, epsilon, validlist)  # return (x,y)
+                    x = action[0]
+                    y = action[1]
+                    state = board
+                    (board, totctr) = MakeMove(board, x, y, player)
 
-                next_state, reward, done = board, 0, terminal
 
-                #이걸 리스트에 다 넣고
-                replay_buffer.push(state, action, reward, next_state, done)
+                    next_state, reward, done = board, 0, terminal
 
-                print('player' + player + 'played (X Y): ' + str(x) + ' ' + str(y))
-                print('# of pieces taken: ' + str(totctr))
-                PrintBoard()
+                    #이걸 리스트에 다 넣고
+                    replay_buffer.push(state, action, reward, next_state, done)
+
+                    print('player' + player + 'played (X Y): ' + str(x) + ' ' + str(y))
+                    print('# of pieces taken: ' + str(totctr))
+                    PrintBoard()
 
     # 한 게임이 끝났을 때
     # 에피소드 list의 마지막 done을 True로 바꾸고 그걸 buffer로 바꾸기
-    replay_buffer
+
     print('Player cannot play! Game ended!')
     print('Score Comp1: ' + str(EvalBoard(board, '1')))
-    print('Score Comp2: ' + str(EvalBoard(board, '2')))
+    print('Score Comp2: ' + str(EvalBoard(board, '-1')))
     # 이겼으면
-    if EvalBoard(board, '2') > EvalBoard(board, '1'):
+    if EvalBoard(board, '-1') > EvalBoard(board, '1'):
         reward = 10
-    elif EvalBoard(board, '2') == EvalBoard(board, '1'):
+    elif EvalBoard(board, '-1') == EvalBoard(board, '1'):
         reward = 0
     else:
         reward = -5
 
     # discounted sum of reward 해서 각 에피소드별 reward 구해야할듯
     # 10판마다 학습시키는건 어디서하는거지?
-    all_rewards.append(episode_reward)
-    episode_reward = 0
+    all_rewards.append(reward)
+    reward = 0
 
     if len(replay_buffer) > replay_initial:
         if num_episode % 10 == 0:
             loss = compute_td_loss(batch_size)
             losses.append(loss.data[0])
 
-    if frame_idx % 10000 == 0:
-        plot(frame_idx, all_rewards, losses)
+    if i % 100 == 0:
+        plot(i, all_rewards, losses)
 
     # 한 게임 끝
 

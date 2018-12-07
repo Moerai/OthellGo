@@ -38,7 +38,7 @@ class CnnDQN(nn.Module):
         return x
 
     def feature_size(self):
-        return self.features(autograd.Variable(torch.zeros(1, *self.input_shape))).view(1, -1).size(1)
+        return self.features(autograd.Variable(torch.zeros(32, 1, *self.input_shape))).view(1, -1).size(1)
 
     def act(self, state, epsilon, validlist):
         if random.random() > epsilon:
