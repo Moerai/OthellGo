@@ -44,7 +44,8 @@ class CnnDQN(nn.Module):
         if random.random() > epsilon:
             state = np.expand_dims(np.float32(state), 0)
             state = Variable(torch.FloatTensor(np.float32(state)).unsqueeze(0), volatile=True)
-            q_value = self.forward(state)  # size 64의 linear [1,2,3,4]
+            q_value = self.forward(state)
+            # size 64의 linear [1,2,3,4]
             # q_value에서 valid 한 것만 놔두기.
             valid_q_value = []
             for i in validlist:

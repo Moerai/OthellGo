@@ -21,6 +21,7 @@ Variable = lambda *args, **kwargs: autograd.Variable(*args, **kwargs).cuda() if 
 
 model = cnndqn.CnnDQN((8, 8), 8*8)
 
+
 optimizer = optim.Adam(model.parameters(), lr=0.00001)
 
 replay_initial = 300
@@ -40,6 +41,7 @@ dirx = [-1, 0, 1, -1, 1, -1, 0, 1]
 diry = [-1, -1, -1, 0, 0, 1, 1, 1]
 
 opt = 2
+
 depth = 4
 
 num_frames = 14000
@@ -339,8 +341,8 @@ for i in range(num_episode):
         # all_rewards를 평균으로하면 더 좋을듯. 근데 그럼 x축도 바꿔야함
         # 왜냐면 지금 x축은 에피소드 개수이기 때문
         plot(i, all_rewards, losses)
-        now = datetime.today().strftime("%Y%m%d_%H%M%S")
-        torch.save(model, "./save/" + now + ".pt")
+        # now = datetime.today().strftime("%Y%m%d_%H%M%S")
+        # torch.save(model, "./save/" + now + ".pt")
 
     # 한 게임 끝
 
