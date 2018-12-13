@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96af2509-ea2d-454a-9bb3-38299d7c878f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/R_User_Library.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Othello.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Othello.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Othello_RL.py" beforeDir="false" afterPath="$PROJECT_DIR$/Othello_RL.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cnndqn.py" beforeDir="false" afterPath="$PROJECT_DIR$/cnndqn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prac.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyter/.ipynb_checkpoints/prac-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/pyter/.ipynb_checkpoints/prac-checkpoint.ipynb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,11 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Othello_RL.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2890">
-              <caret line="170" lean-forward="true" selection-start-line="170" selection-end-line="170" />
+            <state relative-caret-position="-2771">
+              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -35,9 +30,27 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Othello_AlphaToRandom.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="169">
+              <caret line="159" column="24" lean-forward="true" selection-start-line="156" selection-start-column="7" selection-end-line="159" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Othello_AlphaBeta.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="352">
+              <caret line="152" column="20" lean-forward="true" selection-start-line="152" selection-start-column="20" selection-end-line="152" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cnndqn.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="781">
+            <state relative-caret-position="765">
               <caret line="54" column="34" selection-start-line="54" selection-start-column="34" selection-end-line="54" selection-end-column="34" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
@@ -49,7 +62,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/replaybuffer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
+            <state relative-caret-position="85">
               <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
@@ -111,10 +124,11 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="-11" />
-    <option name="width" value="1940" />
-    <option name="height" value="2111" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="49152" />
+    <option name="y" value="49150" />
+    <option name="width" value="7710" />
+    <option name="height" value="3275" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -233,6 +247,9 @@
       <module name="Othello" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -367,6 +384,7 @@
       <workItem from="1543491771180" duration="1121000" />
       <workItem from="1543501864935" duration="580000" />
       <workItem from="1544237001141" duration="9927000" />
+      <workItem from="1544609878362" duration="2808000" />
     </task>
     <task id="LOCAL-00001" summary="잘못 업로드돼서 수정함">
       <created>1543320428800</created>
@@ -393,13 +411,12 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22453000" />
+    <option name="totallyTimeSpent" value="25261000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="1293" height="1407" extended-state="1" />
-    <editor active="true" />
+    <frame x="32768" y="32767" width="5140" height="2183" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18329278" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.039385583" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -414,7 +431,7 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32969603" />
       <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info anchor="bottom" id="Python Console" order="12" visible="true" weight="0.12941177" />
+      <window_info anchor="bottom" id="Python Console" order="12" visible="true" weight="0.047340166" />
       <window_info anchor="right" id="R Packages" order="0" />
       <window_info anchor="right" id="R Graphics" order="1" />
       <window_info anchor="right" id="Commander" order="2" weight="0.4" />
@@ -437,24 +454,10 @@
     <entry file="file://$PROJECT_DIR$/test.py" />
     <entry file="file://$PROJECT_DIR$/venv/Othello_AlphaBetaComputer.py" />
     <entry file="file://$PROJECT_DIR$/Othello_ComputerToComputer.py" />
-    <entry file="file://$PROJECT_DIR$/Othello_AlphaBeta.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6156">
-          <caret line="324" column="12" selection-start-line="324" selection-start-column="12" selection-end-line="328" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Othello_PlayerToPlayer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3344">
           <caret line="178" column="47" selection-start-line="178" selection-start-column="47" selection-end-line="178" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Othello_AlphaToRandom.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="174" column="41" selection-start-line="174" selection-start-column="41" selection-end-line="174" selection-end-column="41" />
         </state>
       </provider>
     </entry>
@@ -463,9 +466,7 @@
     <entry file="file://$PROJECT_DIR$/../Anaconda3/Lib/site-packages/numpy/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/numpy.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/numpy.py" />
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_bundle/pydev_import_hook.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
@@ -473,9 +474,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Othello_RL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2771">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cnndqn.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="781">
+        <state relative-caret-position="765">
           <caret line="54" column="34" selection-start-line="54" selection-start-column="34" selection-end-line="54" selection-end-column="34" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
@@ -485,7 +496,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/replaybuffer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
+        <state relative-caret-position="85">
           <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
@@ -493,13 +504,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Othello_RL.py">
+    <entry file="file://$PROJECT_DIR$/Othello_AlphaToRandom.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2890">
-          <caret line="170" lean-forward="true" selection-start-line="170" selection-end-line="170" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="169">
+          <caret line="159" column="24" lean-forward="true" selection-start-line="156" selection-start-column="7" selection-end-line="159" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Othello_AlphaBeta.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="152" column="20" lean-forward="true" selection-start-line="152" selection-start-column="20" selection-end-line="152" selection-end-column="20" />
         </state>
       </provider>
     </entry>
